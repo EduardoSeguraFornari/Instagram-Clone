@@ -1,0 +1,71 @@
+# Swift & iOS Project Exclusions
+
+# Xcode user-specific files
+xcuserdata/
+*.xcuserstate
+**/UserInterfaceState.xcuserstate
+
+# Debug and breakpoint files  
+*.xcbkptlist
+
+# Build artifacts and temporary files
+build/
+DerivedData/
+*.hmap
+
+# Legacy Xcode compatibility files
+*.xcscmblueprint
+*.xccheckout
+*.moved-aside
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+
+# App distribution files
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager build directory
+.build/
+
+# Playground files
+timeline.xctimeline
+playground.xcworkspace
+
+# Dependency management (if using alternatives to SPM)
+Carthage/Build/
+# Pods/ # Uncomment if using CocoaPods instead of SPM
+
+# Development tools
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# System and IDE files
+.DS_Store
+.vscode/
+.idea/
+
+# Temporary and backup files
+*.tmp
+*.swp
+*.backup
+*.log
+
+# Environment configuration
+.env
+.env.local
+
+# Firebase debug logs (optional)
+firebase-debug.log
+
+# Archive files
+*.zip
+*.tar.gz
