@@ -23,6 +23,8 @@ struct FeedView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Text("Instagram")
+                        .font(.custom("Snell Roundhand", size: 22))
+                        .fontWeight(.bold)
                         .frame(width: 100)
                 }
                 .sharedBackgroundVisibility(.hidden)
