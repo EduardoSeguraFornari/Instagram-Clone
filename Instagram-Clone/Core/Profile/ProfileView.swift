@@ -69,7 +69,7 @@ struct ProfileView: View {
 
                 // post grid view
                 LazyVGrid(columns: gridItems, spacing: 1) {
-                    ForEach(0 ... 15, id: \.self) { index in
+                    ForEach(0...15, id: \.self) { index in
                         Image("wakanda-forever")
                             .resizable()
                             .scaledToFill()
