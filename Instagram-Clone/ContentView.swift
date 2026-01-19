@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         Group {
-            if false {
+            if true {
                 MainTabView()
             } else {
                 LoginView()

@@ -14,27 +14,33 @@ struct SearchView: View {
             ScrollView {
                 LazyVStack(spacing: 12) {
                     ForEach(User.usersMock) { user in
-                        HStack {
-                            Image(user.profileImage ?? "")
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 40, height: 40)
-                                .clipShape(Circle())
-                            VStack(alignment: .leading) {
-                                Text(user.username)
-                                    .fontWeight(.semibold)
-                                if let fullname = user.fullname {
-                                    Text(fullname)
+                        NavigationLink(value: user) {
+                            HStack {
+                                Image(user.profileImageUrl ?? "")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 40, height: 40)
+                                    .clipShape(Circle())
+                                VStack(alignment: .leading) {
+                                    Text(user.username)
+                                        .fontWeight(.semibold)
+                                    if let fullname = user.fullname {
+                                        Text(fullname)
+                                    }
                                 }
+                                .font(.footnote)
+                                Spacer()
                             }
-                            .font(.footnote)
-                            Spacer()
+                            .padding(.horizontal)
                         }
-                        .padding(.horizontal)
                     }
                 }
                 .padding(.bottom, 8)
                 .searchable(text: $searchText, prompt: "Search...")
+            }
+            .navigationDestination(for: User.self) { user in
+                ProfileView(user: user)
+                    .navigationBarBackButtonHidden()
             }
             .navigationTitle("Explore")
             .navigationBarTitleDisplayMode(.inline)
