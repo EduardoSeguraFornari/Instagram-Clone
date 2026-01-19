@@ -8,7 +8,19 @@
 import SwiftUI
 
 struct FeedCell: View {
-    let post: Post
+    @State private var viewModel: FeedCellViewModel
+
+    private var post: Post {
+        viewModel.post
+    }
+
+    private var didLike: Bool {
+        post.didLike ?? false
+    }
+
+    init(post: Post) {
+        self.viewModel = FeedCellViewModel(post: post)
+    }
 
     var body: some View {
         VStack {
@@ -39,10 +51,11 @@ struct FeedCell: View {
             // action buttons
             HStack(spacing: 16) {
                 Button {
-                    print("Like post")
+                    handleLikeTapped()
                 } label: {
-                    Image(systemName: "heart")
+                    Image(systemName: didLike ? "heart.fill" : "heart")
                         .imageScale(.large)
+                        .foregroundStyle(didLike ? .red : .black)
                 }
                 Button {
                     print("Comment on post")
@@ -87,6 +100,16 @@ struct FeedCell: View {
                 .padding(.leading, 10)
                 .padding(.top, 1)
                 .foregroundColor(.gray)
+        }
+    }
+
+    private func handleLikeTapped() {
+        Task {
+            if didLike {
+                await viewModel.unlike()
+            } else {
+                await viewModel.like()
+            }
         }
     }
 }

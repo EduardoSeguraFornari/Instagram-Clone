@@ -15,9 +15,13 @@ struct Post: Identifiable, Hashable, Codable {
     let imageUrl: String
     let timestamp: Date
     var user: User?
+
+    var didLike: Bool? = false
 }
 
 extension Post {
+    static let mockImageUrl = "https://firebasestorage.googleapis.com:443/v0/b/instagramswiftui-22394.appspot.com/o/profile_images%2FB70FA869-C342-4756-BDC0-C2D1B948F89C?alt=media&token=7a1a94b3-4d15-41d7-9400-1210fa46c681"
+
     static let postMock = postsMock[0]
 
     static let postsMock: [Post] = [
