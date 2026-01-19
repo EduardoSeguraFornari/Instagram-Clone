@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyANcNtptPtI9X8PfV-WHWDcbC_lW3FLhGg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>788442275846</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.fornari.Instagram-Clone</string>
+	<key>PROJECT_ID</key>
+	<string>instagram-clone-9496c</string>
+	<key>STORAGE_BUCKET</key>
+	<string>instagram-clone-9496c.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:788442275846:ios:dc8b7ca1dabf54f91f6387</string>
+</dict>
+</plist>
