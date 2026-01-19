@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         Group {
-            if true {
+            if Authentication.shared.loggedIn != nil {
                 MainTabView()
             } else {
                 LoginView()
