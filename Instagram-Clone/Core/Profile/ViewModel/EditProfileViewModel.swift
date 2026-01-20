@@ -5,6 +5,7 @@
 //  Created by Eduardo Segura Fornari on 20/01/26.
 //
 
+import Firebase
 import PhotosUI
 import SwiftUI
 
@@ -17,11 +18,34 @@ final class EditProfileViewModel {
     var selectedImage: PhotosPickerItem? {
         didSet { Task { await loadImage(fromItem: selectedImage) } }
     }
+    var user: User
+
+    init(user: User) {
+        self.user = user
+    }
 
     func loadImage(fromItem item: PhotosPickerItem?) async {
         guard let item else { return }
         guard let data = try? await item.loadTransferable(type: Data.self) else { return }
         guard let uiImage = UIImage(data: data) else { return }
         self.profileImage = Image(uiImage: uiImage)
+    }
+
+    func updateUserData() async {
+        do {
+            var data = [String: Any]()
+
+            if !fullname.isEmpty && user.fullname != fullname {
+                data["fullname"] = fullname
+            }
+            if !bio.isEmpty && user.bio != bio {
+                data["bio"] = bio
+            }
+            if !data.isEmpty {
+                try await Firestore.firestore().collection("users").document(user.id).updateData(data)
+            }
+        } catch {
+            print("DEBUG: Failed to update user data with error: \(error.localizedDescription)")
+        }
     }
 }

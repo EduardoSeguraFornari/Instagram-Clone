@@ -5,7 +5,9 @@
 //  Created by Eduardo Segura Fornari on 19/01/26.
 //
 
+import Firebase
 import FirebaseAuth
+import FirebaseFirestore
 
 final class AuthServiceMock: AuthServiceProtocol {
     init() {
@@ -18,7 +20,11 @@ final class AuthServiceMock: AuthServiceProtocol {
     }
 
     func loadUserData() async throws {
-        Authentication.shared.user = User.userMock
+        guard let currentUid = Authentication.shared.user?.id else { return }
+        let snapshot = try await Firestore.firestore().collection("users").document(currentUid).getDocument()
+        let user = try snapshot.data(as: User.self)
+        Authentication.shared.user = user
+//        Authentication.shared.user = User.userMock
     }
 
     func logIn(withEmail email: String, password: String) async throws {

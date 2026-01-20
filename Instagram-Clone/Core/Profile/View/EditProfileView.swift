@@ -11,7 +11,11 @@ import SwiftUI
 struct EditProfileView: View {
     @Environment(\.dismiss) var dismiss
 
-    @State private var viewModel = EditProfileViewModel()
+    @State private var viewModel: EditProfileViewModel
+
+    init(viewModel: EditProfileViewModel) {
+        self.viewModel = viewModel
+    }
 
     var body: some View {
         VStack {
@@ -26,7 +30,7 @@ struct EditProfileView: View {
                         .fontWeight(.semibold)
                     Spacer()
                     Button {
-                        print("Update profile info")
+                        Task { await viewModel.updateUserData() }
                     } label: {
                         Text("Done")
                             .font(.subheadline)
@@ -88,5 +92,5 @@ struct EditProfileRowView: View {
 }
 
 #Preview {
-    EditProfileView()
+    EditProfileView(viewModel: EditProfileViewModel(user: User.userMock))
 }
