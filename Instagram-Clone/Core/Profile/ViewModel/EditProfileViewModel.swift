@@ -26,6 +26,9 @@ final class EditProfileViewModel {
     init(user: User, service: ImageUploaderServiceProtocol) {
         self.user = user
         self.service = service
+
+        self.bio = user.bio ?? ""
+        self.fullname = user.fullname ?? ""
     }
 
     func loadImage(fromItem item: PhotosPickerItem?) async {
