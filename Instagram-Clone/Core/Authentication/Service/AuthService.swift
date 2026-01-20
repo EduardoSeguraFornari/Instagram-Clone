@@ -9,9 +9,6 @@ import FirebaseAuth
 import FirebaseFirestore
 
 final class AuthService: AuthServiceProtocol {
-
-    static let shared = AuthService()
-
     init() {
         Authentication.shared.loggedIn = Auth.auth().currentUser != nil
     }
