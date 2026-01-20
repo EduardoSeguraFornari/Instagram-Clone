@@ -12,4 +12,5 @@ protocol AuthServiceProtocol {
     func loadUserData() async throws
     func logIn(withEmail email: String, password: String) async throws
     func signOut()
+    func uploadUserData(email: String, id: String, username: String) async throws
 }

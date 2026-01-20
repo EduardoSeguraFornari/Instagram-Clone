@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LoginView: View {
-    @State private var viewModel = LoginViewModel(service: AuthServiceMock())
+    @State private var viewModel: LoginViewModel
 
     init(viewModel: LoginViewModel) {
         self.viewModel = viewModel

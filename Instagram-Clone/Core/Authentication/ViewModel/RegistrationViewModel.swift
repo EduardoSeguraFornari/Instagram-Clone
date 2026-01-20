@@ -21,5 +21,8 @@ final class RegistrationViewModel {
 
     func createUser() async throws {
         try await service.createUser(email: email, password: password, username: username)
+        email = ""
+        password = ""
+        username = ""
     }
 }

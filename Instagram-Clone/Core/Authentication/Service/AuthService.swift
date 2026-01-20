@@ -28,13 +28,17 @@ final class AuthService: AuthServiceProtocol {
     }
 
     func loadUserData() async throws {
-        
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        let snapshot = try await Firestore.firestore().collection("users").document(currentUid).getDocument()
+        let user = try snapshot.data(as: User.self)
+        Authentication.shared.user = user
     }
 
     func logIn(withEmail email: String, password: String) async throws {
         do {
             try await Auth.auth().signIn(withEmail: email, password: password)
             Authentication.shared.loggedIn = true
+            try await loadUserData()
         } catch {
             print("DEBUG: Failed to log in with error: \(error.localizedDescription)")
             throw error
@@ -43,7 +47,8 @@ final class AuthService: AuthServiceProtocol {
 
     func signOut() {
         try? Auth.auth().signOut()
-        Authentication.shared.loggedIn = false
+        Authentication.shared.loggedIn = nil
+        Authentication.shared.user = nil
     }
 
     func uploadUserData(email: String, id: String, username: String) async throws {
@@ -51,6 +56,7 @@ final class AuthService: AuthServiceProtocol {
         do {
             let data = try Firestore.Encoder().encode(user)
             try await Firestore.firestore().collection("users").document(id).setData(data)
+            Authentication.shared.user = user
         } catch {
             print("DEBUG: Failed to upload user data with error: \(error.localizedDescription)")
             throw error

@@ -12,6 +12,7 @@ import Foundation
 final class Authentication {
     static let shared = Authentication()
     var loggedIn: Bool?
+    var user: User?
 
     private init() { }
 }
