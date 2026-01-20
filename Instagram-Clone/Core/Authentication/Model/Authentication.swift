@@ -14,5 +14,8 @@ final class Authentication {
     var loggedIn: Bool?
     var user: User?
 
-    private init() { }
+    private init() {
+        loggedIn = true
+        user = User.userMock
+    }
 }
