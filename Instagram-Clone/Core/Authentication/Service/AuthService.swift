@@ -7,16 +7,21 @@
 
 import FirebaseAuth
 
-final class AutAuthService: AuthServiceProtocol {
+final class AuthService: AuthServiceProtocol {
 
-    static let shared = AutAuthService()
+    static let shared = AuthService()
 
     init() {
         Authentication.shared.loggedIn = Auth.auth().currentUser != nil
     }
 
     func createUser(email: String, password: String, username: String) async throws {
-        
+        do {
+            try await Auth.auth().createUser(withEmail: email, password: password)
+            Authentication.shared.loggedIn = true
+        } catch {
+            print("DEBUG: Failed to register user with error: \(error.localizedDescription)")
+        }
     }
 
     func loadUserData() async throws {

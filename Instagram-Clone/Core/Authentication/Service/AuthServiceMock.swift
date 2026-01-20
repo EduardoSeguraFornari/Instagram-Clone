@@ -8,9 +8,6 @@
 import FirebaseAuth
 
 final class AuthServiceMock: AuthServiceProtocol {
-
-    static let shared = AutAuthService()
-
     init() {
         Authentication.shared.loggedIn = nil
     }

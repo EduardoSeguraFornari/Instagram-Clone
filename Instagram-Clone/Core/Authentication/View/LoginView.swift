@@ -11,6 +11,8 @@ struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
 
+    let viewModel = RegistrationViewModel(service: AuthService())
+
     var body: some View {
         NavigationStack {
             VStack {

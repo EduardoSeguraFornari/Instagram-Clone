@@ -9,9 +9,10 @@ import SwiftUI
 
 struct CreateUsernameView: View {
     @Environment(\.dismiss) var dismiss
-    @State private var username: String = ""
+    @Environment(RegistrationViewModel.self) var viewModel
 
     var body: some View {
+        @Bindable var bindableViewModel = viewModel
         VStack(spacing: 12) {
             Text("Create username")
                 .font(.title2)
@@ -24,7 +25,7 @@ struct CreateUsernameView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 24)
 
-            TextField("Username", text: $username)
+            TextField("Username", text: $bindableViewModel.username)
                 .modifier(TextFieldModifier())
                 .autocapitalization(.none)
                 .padding(.top)
@@ -62,5 +63,6 @@ struct CreateUsernameView: View {
 #Preview {
     NavigationStack {
         CreateUsernameView()
+            .environment(RegistrationViewModel(service: AuthServiceMock()))
     }
 }
