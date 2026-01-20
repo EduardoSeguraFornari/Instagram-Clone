@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct LoginView: View {
-    @State private var email: String = ""
-    @State private var password: String = ""
+    @State private var viewModel = LoginViewModel(service: AuthServiceMock())
 
-    let viewModel = RegistrationViewModel(service: AuthService())
+    init(viewModel: LoginViewModel) {
+        self.viewModel = viewModel
+    }
 
     var body: some View {
+        @Bindable var bindableViewModel = viewModel
         NavigationStack {
             VStack {
                 Spacer()
@@ -25,10 +27,10 @@ struct LoginView: View {
 
                 // text fields
                 VStack {
-                    TextField("Enter your email", text: $email)
+                    TextField("Enter your email", text: $bindableViewModel.email)
                         .modifier(TextFieldModifier())
                         .autocapitalization(.none)
-                    TextField("Enter your password", text: $password)
+                    TextField("Enter your password", text: $bindableViewModel.password)
                         .modifier(TextFieldModifier())
                 }
 
@@ -44,7 +46,7 @@ struct LoginView: View {
                 .frame(maxWidth: .infinity, alignment: .trailing)
 
                 Button {
-                    print("Login")
+                    Task { await viewModel.signIn() }
                 } label: {
                     Text("Log In")
                         .font(.subheadline)
@@ -103,5 +105,5 @@ struct LoginView: View {
 }
 
 #Preview {
-    LoginView()
+    LoginView(viewModel: LoginViewModel(service: AuthServiceMock()))
 }

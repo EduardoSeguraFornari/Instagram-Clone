@@ -8,15 +8,16 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var viewModel = RegistrationViewModel(service: AuthServiceMock())
+//    @State var viewModel = ContentViewModel()
+    @State var registrationViewModel = RegistrationViewModel(service: AuthServiceMock())
 
     var body: some View {
         Group {
-            if Authentication.shared.loggedIn != nil {
+            if let loggedIn = Authentication.shared.loggedIn, loggedIn {
                 MainTabView()
             } else {
-                LoginView()
-                    .environment(viewModel)
+                LoginView(viewModel: LoginViewModel(service: AuthServiceMock()))
+                    .environment(registrationViewModel)
             }
         }
     }

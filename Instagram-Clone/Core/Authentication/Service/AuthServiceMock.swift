@@ -18,7 +18,7 @@ final class AuthServiceMock: AuthServiceProtocol {
 
     func loadUserData() async throws { }
 
-    func login(withEmail email: String, password: String) async throws {
+    func logIn(withEmail email: String, password: String) async throws {
         Authentication.shared.loggedIn = true
     }
 

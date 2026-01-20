@@ -28,11 +28,17 @@ final class AuthService: AuthServiceProtocol {
         
     }
 
-    func login(withEmail email: String, password: String) async throws {
-        
+    func logIn(withEmail email: String, password: String) async throws {
+        do {
+            try await Auth.auth().signIn(withEmail: email, password: password)
+            Authentication.shared.loggedIn = true
+        } catch {
+            print("DEBUG: Failed to log in with error: \(error.localizedDescription)")
+        }
     }
 
     func signOut() {
-        
+        try? Auth.auth().signOut()
+        Authentication.shared.loggedIn = false
     }
 }
