@@ -22,7 +22,7 @@ struct Instagram_CloneApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView(service: AuthService())
+            ContentView(service: AuthServiceMock())
         }
     }
 }

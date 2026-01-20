@@ -21,7 +21,7 @@ struct MainTabView: View {
                 }
                 .tag(0)
 
-            SearchView()
+            SearchView(viewModel: SearchViewModel(service: UserService()))
                 .onAppear { selectedIndex = 1 }
                 .tabItem {
                     Image(systemName: "magnifyingglass")

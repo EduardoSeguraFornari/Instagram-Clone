@@ -30,7 +30,7 @@ struct LoginView: View {
                     TextField("Enter your email", text: $bindableViewModel.email)
                         .modifier(TextFieldModifier())
                         .autocapitalization(.none)
-                    TextField("Enter your password", text: $bindableViewModel.password)
+                    SecureField("Enter your password", text: $bindableViewModel.password)
                         .modifier(TextFieldModifier())
                 }
 

@@ -11,6 +11,10 @@ struct SearchView: View {
     @State private var searchText: String = ""
     @State private var viewModel = SearchViewModel(service: UserService())
 
+    init(viewModel: SearchViewModel) {
+        self.viewModel = viewModel
+    }
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -53,7 +57,7 @@ struct SearchView: View {
 
 #Preview {
     TabView {
-        SearchView()
+        SearchView(viewModel: SearchViewModel(service: UserServiceMock()))
             .tabItem {
                 Image(systemName: "magnifyingglass")
             }

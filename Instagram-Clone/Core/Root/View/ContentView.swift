@@ -20,7 +20,7 @@ struct ContentView: View {
     var body: some View {
         Group {
             if let loggedIn = Authentication.shared.loggedIn, loggedIn,
-                let user = Authentication.shared.user {
+               Authentication.shared.user != nil {
                 MainTabView(user: User.userMock)
             } else {
                 LoginView(viewModel: LoginViewModel(service: service))
