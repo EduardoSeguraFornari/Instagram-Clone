@@ -20,14 +20,19 @@ final class EditProfileViewModel {
     }
     var user: User
 
-    init(user: User) {
+    private let service: ImageUploaderServiceProtocol
+    private var uiImage: UIImage?
+
+    init(user: User, service: ImageUploaderServiceProtocol) {
         self.user = user
+        self.service = service
     }
 
     func loadImage(fromItem item: PhotosPickerItem?) async {
         guard let item else { return }
         guard let data = try? await item.loadTransferable(type: Data.self) else { return }
         guard let uiImage = UIImage(data: data) else { return }
+        self.uiImage = uiImage
         self.profileImage = Image(uiImage: uiImage)
     }
 
@@ -35,6 +40,10 @@ final class EditProfileViewModel {
         do {
             var data = [String: Any]()
 
+            if let uiImage = uiImage {
+                let imageUrl = try? await service.upload(image: uiImage)
+                data["profileImageUrl"] = imageUrl
+            }
             if !fullname.isEmpty && user.fullname != fullname {
                 data["fullname"] = fullname
             }

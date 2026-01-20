@@ -92,5 +92,10 @@ struct EditProfileRowView: View {
 }
 
 #Preview {
-    EditProfileView(viewModel: EditProfileViewModel(user: User.userMock))
+    EditProfileView(
+        viewModel: EditProfileViewModel(
+            user: User.userMock,
+            service: ImageUploaderServiceMock()
+        )
+    )
 }
