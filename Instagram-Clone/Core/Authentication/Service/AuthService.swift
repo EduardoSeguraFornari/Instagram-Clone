@@ -6,6 +6,7 @@
 //
 
 import FirebaseAuth
+import FirebaseFirestore
 
 final class AuthService: AuthServiceProtocol {
 
@@ -17,10 +18,12 @@ final class AuthService: AuthServiceProtocol {
 
     func createUser(email: String, password: String, username: String) async throws {
         do {
-            try await Auth.auth().createUser(withEmail: email, password: password)
+            let result = try await Auth.auth().createUser(withEmail: email, password: password)
             Authentication.shared.loggedIn = true
+            try await uploadUserData(email: email, id: result.user.uid, username: username)
         } catch {
             print("DEBUG: Failed to register user with error: \(error.localizedDescription)")
+            throw error
         }
     }
 
@@ -34,11 +37,23 @@ final class AuthService: AuthServiceProtocol {
             Authentication.shared.loggedIn = true
         } catch {
             print("DEBUG: Failed to log in with error: \(error.localizedDescription)")
+            throw error
         }
     }
 
     func signOut() {
         try? Auth.auth().signOut()
         Authentication.shared.loggedIn = false
+    }
+
+    func uploadUserData(email: String, id: String, username: String) async throws {
+        let user = User(id: id, username: username, email: email)
+        do {
+            let data = try Firestore.Encoder().encode(user)
+            try await Firestore.firestore().collection("users").document(id).setData(data)
+        } catch {
+            print("DEBUG: Failed to upload user data with error: \(error.localizedDescription)")
+            throw error
+        }
     }
 }
