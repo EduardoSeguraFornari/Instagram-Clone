@@ -9,9 +9,16 @@ import Firebase
 import FirebaseFirestore
 
 struct UserService: UserServiceProtocol {
+    private let imageUploaderService: ImageUploaderServiceProtocol
+    private let usersCollection = Firestore.firestore().collection("users")
+
+    init (imageUploaderService: ImageUploaderServiceProtocol = ImageUploaderService()) {
+        self.imageUploaderService = imageUploaderService
+    }
+
     func fetchAllUsers() async throws -> [User] {
         do {
-            let snapshot = try await Firestore.firestore().collection("users").getDocuments()
+            let snapshot = try await usersCollection.getDocuments()
             return snapshot.documents.compactMap { try? $0.data(as: User.self) }
         } catch {
             throw error
@@ -20,7 +27,7 @@ struct UserService: UserServiceProtocol {
 
     func fetchUser(withId id: String) async throws -> User {
         do {
-            let snapshot = try await Firestore.firestore().collection("users").document(id).getDocument()
+            let snapshot = try await usersCollection.document(id).getDocument()
             return try snapshot.data(as: User.self)
         } catch {
             print("DEBUG: Failed to fetch user with error: \(error.localizedDescription)")
@@ -28,11 +35,35 @@ struct UserService: UserServiceProtocol {
         }
     }
 
+    func updateUserData(bio: String?, fullname: String?, image: UIImage?) async throws {
+        guard let currentUser = Authentication.shared.user else { return }
+
+        do {
+            var data = [String: Any]()
+
+            if let uiImage = image {
+                let imageUrl = try? await imageUploaderService.upload(image: uiImage)
+                data["profileImageUrl"] = imageUrl
+            }
+            if let fullname = fullname, !fullname.isEmpty && currentUser.fullname != fullname {
+                data["fullname"] = fullname
+            }
+            if currentUser.bio != bio {
+                data["bio"] = bio ?? ""
+            }
+            if !data.isEmpty {
+                try await usersCollection.document(currentUser.id).updateData(data)
+            }
+        } catch {
+            print("DEBUG: Failed to update user data with error: \(error.localizedDescription)")
+        }
+    }
+
     func uploadUserData(email: String, id: String, username: String) async throws {
         let user = User(id: id, username: username, email: email)
         do {
             let data = try Firestore.Encoder().encode(user)
-            try await Firestore.firestore().collection("users").document(id).setData(data)
+            try await usersCollection.document(id).setData(data)
         } catch {
             print("DEBUG: Failed to upload user data with error: \(error.localizedDescription)")
             throw error

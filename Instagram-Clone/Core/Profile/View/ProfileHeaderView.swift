@@ -65,7 +65,7 @@ struct ProfileHeaderView: View {
             Divider()
         }
         .fullScreenCover(isPresented: $showEditProfile) {
-            EditProfileView(viewModel: EditProfileViewModel(user: user, service: ImageUploaderService()))
+            EditProfileView(viewModel: EditProfileViewModel(user: user, service: UserService()))
         }
     }
 }

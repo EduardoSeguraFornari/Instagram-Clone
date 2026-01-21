@@ -5,7 +5,7 @@
 //  Created by Eduardo Segura Fornari on 20/01/26.
 //
 
-import Foundation
+import UIKit
 
 struct UserServiceMock: UserServiceProtocol {
     func fetchAllUsers() async throws -> [User] {
@@ -16,6 +16,7 @@ struct UserServiceMock: UserServiceProtocol {
         User.userMock
     }
 
-    func uploadUserData(email: String, id: String, username: String) async throws { }
+    func updateUserData(bio: String?, fullname: String?, image: UIImage?) async throws { }
 
+    func uploadUserData(email: String, id: String, username: String) async throws { }
 }

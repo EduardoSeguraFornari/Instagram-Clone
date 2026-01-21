@@ -20,10 +20,6 @@ final class AuthServiceMock: AuthServiceProtocol {
     }
 
     func loadUserData() async throws {
-//        guard let currentUid = Authentication.shared.user?.id else { return }
-//        let snapshot = try await Firestore.firestore().collection("users").document(currentUid).getDocument()
-//        let user = try snapshot.data(as: User.self)
-//        Authentication.shared.user = user
         Authentication.shared.user = User.userMock
     }
 

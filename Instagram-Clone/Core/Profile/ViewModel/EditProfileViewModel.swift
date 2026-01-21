@@ -20,10 +20,10 @@ final class EditProfileViewModel {
     }
     var user: User
 
-    private let service: ImageUploaderServiceProtocol
+    private let service: UserServiceProtocol
     private var uiImage: UIImage?
 
-    init(user: User, service: ImageUploaderServiceProtocol) {
+    init(user: User, service: UserServiceProtocol) {
         self.user = user
         self.service = service
 
@@ -41,21 +41,7 @@ final class EditProfileViewModel {
 
     func updateUserData() async {
         do {
-            var data = [String: Any]()
-
-            if let uiImage = uiImage {
-                let imageUrl = try? await service.upload(image: uiImage)
-                data["profileImageUrl"] = imageUrl
-            }
-            if !fullname.isEmpty && user.fullname != fullname {
-                data["fullname"] = fullname
-            }
-            if !bio.isEmpty && user.bio != bio {
-                data["bio"] = bio
-            }
-            if !data.isEmpty {
-                try await Firestore.firestore().collection("users").document(user.id).updateData(data)
-            }
+            try await service.updateUserData(bio: bio, fullname: fullname, image: uiImage)
         } catch {
             print("DEBUG: Failed to update user data with error: \(error.localizedDescription)")
         }

@@ -44,5 +44,5 @@ struct FeedView: View {
 }
 
 #Preview {
-    FeedView(viewModel: FeedViewModel(feedService: FeedServiceMock(), userService: UserServiceMock()))
+    FeedView(viewModel: FeedViewModel(postService: PostServiceMock()))
 }
