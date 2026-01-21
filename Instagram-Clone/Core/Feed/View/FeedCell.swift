@@ -19,8 +19,8 @@ struct FeedCell: View {
         post.didLike ?? false
     }
 
-    init(post: Post) {
-        self.viewModel = FeedCellViewModel(post: post)
+    init(viewModel: FeedCellViewModel) {
+        self.viewModel = viewModel
     }
 
     var body: some View {
@@ -120,5 +120,5 @@ struct FeedCell: View {
 }
 
 #Preview {
-    FeedCell(post: Post.postMock)
+    FeedCell(viewModel: FeedCellViewModel(post: Post.postMock, service: PostServiceMock()))
 }

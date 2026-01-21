@@ -14,14 +14,14 @@ struct CurrentUserProfileView: View {
         NavigationStack {
             ScrollView {
                 ProfileHeaderView(user: user)
-                PostGridView(viewModel: ProfileViewModel(service: PostService(), user: user))
+                PostGridView(viewModel: ProfileViewModel(service: PostService.instance, user: user))
             }
             .navigationTitle("Profile")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        AuthService().signOut()
+                        AuthService.instance.signOut()
                     } label: {
                         Image(systemName: "line.3.horizontal")
                             .foregroundColor(.black)

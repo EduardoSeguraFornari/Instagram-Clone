@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SearchView: View {
     @State private var searchText: String = ""
-    @State private var viewModel = SearchViewModel(service: UserService())
+    @State private var viewModel = SearchViewModel(service: UserService.instance)
 
     init(viewModel: SearchViewModel) {
         self.viewModel = viewModel

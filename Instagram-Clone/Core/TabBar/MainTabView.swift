@@ -14,21 +14,21 @@ struct MainTabView: View {
 
     var body: some View {
         TabView(selection: $selectedIndex) {
-            FeedView(viewModel: FeedViewModel(postService: PostService()))
+            FeedView(viewModel: FeedViewModel(postService: PostService.instance))
                 .onAppear { selectedIndex = 0 }
                 .tabItem {
                     Image(systemName: "house")
                 }
                 .tag(0)
 
-            SearchView(viewModel: SearchViewModel(service: UserService()))
+            SearchView(viewModel: SearchViewModel(service: UserService.instance))
                 .onAppear { selectedIndex = 1 }
                 .tabItem {
                     Image(systemName: "magnifyingglass")
                 }
                 .tag(1)
 
-            UploadPostView(tabIndex: $selectedIndex, viewModel: UploadPostViewModel(service: ImageUploaderService()))
+            UploadPostView(tabIndex: $selectedIndex, viewModel: UploadPostViewModel(service: ImageUploaderService.instance))
                 .onAppear { selectedIndex = 2 }
                 .tabItem {
                     Image(systemName: "plus.square")

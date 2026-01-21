@@ -9,6 +9,13 @@ import FirebaseAuth
 import FirebaseFirestore
 
 final class AuthService: AuthServiceProtocol {
+    static var instance: AuthServiceProtocol {
+        if AppConfiguration.useMockServices {
+            return AuthServiceMock()
+        }
+        return AuthService()
+    }
+
     private let userService: UserServiceProtocol
 
     init(userService: UserServiceProtocol = UserService()) {

@@ -9,8 +9,15 @@ import Firebase
 import FirebaseFirestore
 
 struct UserService: UserServiceProtocol {
+    static var instance: UserServiceProtocol {
+        if AppConfiguration.useMockServices {
+            return UserServiceMock()
+        }
+        return UserService()
+    }
+    static let usersCollection = Firestore.firestore().collection("users")
+
     private let imageUploaderService: ImageUploaderServiceProtocol
-    private let usersCollection = Firestore.firestore().collection("users")
 
     init (imageUploaderService: ImageUploaderServiceProtocol = ImageUploaderService()) {
         self.imageUploaderService = imageUploaderService
@@ -18,7 +25,7 @@ struct UserService: UserServiceProtocol {
 
     func fetchAllUsers() async throws -> [User] {
         do {
-            let snapshot = try await usersCollection.getDocuments()
+            let snapshot = try await UserService.usersCollection.getDocuments()
             return snapshot.documents.compactMap { try? $0.data(as: User.self) }
         } catch {
             throw error
@@ -27,7 +34,7 @@ struct UserService: UserServiceProtocol {
 
     func fetchUser(withId id: String) async throws -> User {
         do {
-            let snapshot = try await usersCollection.document(id).getDocument()
+            let snapshot = try await UserService.usersCollection.document(id).getDocument()
             return try snapshot.data(as: User.self)
         } catch {
             print("DEBUG: Failed to fetch user with error: \(error.localizedDescription)")
@@ -52,7 +59,7 @@ struct UserService: UserServiceProtocol {
                 data["bio"] = bio ?? ""
             }
             if !data.isEmpty {
-                try await usersCollection.document(currentUser.id).updateData(data)
+                try await UserService.usersCollection.document(currentUser.id).updateData(data)
             }
         } catch {
             print("DEBUG: Failed to update user data with error: \(error.localizedDescription)")
@@ -63,7 +70,7 @@ struct UserService: UserServiceProtocol {
         let user = User(id: id, username: username, email: email)
         do {
             let data = try Firestore.Encoder().encode(user)
-            try await usersCollection.document(id).setData(data)
+            try await UserService.usersCollection.document(id).setData(data)
         } catch {
             print("DEBUG: Failed to upload user data with error: \(error.localizedDescription)")
             throw error

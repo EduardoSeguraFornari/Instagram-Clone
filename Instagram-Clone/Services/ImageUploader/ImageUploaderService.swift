@@ -10,6 +10,13 @@ import FirebaseStorage
 import UIKit
 
 struct ImageUploaderService: ImageUploaderServiceProtocol {
+    static var instance: ImageUploaderServiceProtocol {
+        if AppConfiguration.useMockServices {
+            return ImageUploaderServiceMock()
+        }
+        return ImageUploaderService()
+    }
+
     func upload(image: UIImage) async throws -> String? {
         guard let imageData = image.jpegData(compressionQuality: 0.5) else { return nil }
         let fileName = UUID().uuidString
