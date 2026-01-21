@@ -11,18 +11,20 @@ import PhotosUI
 struct UploadPostView: View {
     @State private var caption: String = ""
     @State private var imagePickerPresented = false
-    @State private var viewModel = UploadPostViewModel()
-    @Binding var tabIndex: Int
+    @Binding private var tabIndex: Int
+    @State private var viewModel: UploadPostViewModel
+
+    init(tabIndex: Binding<Int>, viewModel: UploadPostViewModel) {
+        self._tabIndex = tabIndex
+        self._viewModel = State(initialValue: viewModel)
+    }
 
     var body: some View {
         VStack {
             // action tool bar
             HStack {
                 Button {
-                    caption = ""
-                    viewModel.selectedImage = nil
-                    viewModel.postImage = nil
-                    tabIndex = 0
+                    clearPostDataAndReturnToFeed()
                 } label: {
                     Text("Cancel")
                 }
@@ -35,7 +37,10 @@ struct UploadPostView: View {
                 Spacer()
 
                 Button {
-                    print("DEBUG: Upload")
+                    Task {
+                        await viewModel.uploadPost(caption: caption)
+                        clearPostDataAndReturnToFeed()
+                    }
                 } label: {
                     Text("Upload")
                         .fontWeight(.semibold)
@@ -62,8 +67,15 @@ struct UploadPostView: View {
         }
         .photosPicker(isPresented: $imagePickerPresented, selection: $viewModel.selectedImage)
     }
+
+    private func clearPostDataAndReturnToFeed() {
+        caption = ""
+        viewModel.selectedImage = nil
+        viewModel.postImage = nil
+        tabIndex = 0
+    }
 }
 
 #Preview {
-    UploadPostView(tabIndex: .constant(0))
+    UploadPostView(tabIndex: .constant(0), viewModel: UploadPostViewModel(service: ImageUploaderServiceMock()))
 }

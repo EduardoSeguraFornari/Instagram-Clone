@@ -28,7 +28,7 @@ struct MainTabView: View {
                 }
                 .tag(1)
 
-            UploadPostView(tabIndex: $selectedIndex)
+            UploadPostView(tabIndex: $selectedIndex, viewModel: UploadPostViewModel(service: ImageUploaderService()))
                 .onAppear { selectedIndex = 2 }
                 .tabItem {
                     Image(systemName: "plus.square")

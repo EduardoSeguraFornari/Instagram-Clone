@@ -8,28 +8,19 @@
 import SwiftUI
 
 struct ContentView: View {
-    let service: AuthServiceProtocol
-
-    @State private var registrationViewModel: RegistrationViewModel
-
-    init(service: AuthServiceProtocol) {
-        self.service = service
-        self.registrationViewModel = RegistrationViewModel(service: service)
-    }
-
     var body: some View {
         Group {
             if let loggedIn = Authentication.shared.loggedIn, loggedIn,
                let user = Authentication.shared.user {
                 MainTabView(user: user)
             } else {
-                LoginView(viewModel: LoginViewModel(service: service))
-                    .environment(registrationViewModel)
+                LoginView(viewModel: LoginViewModel(service: AuthService()))
+                    .environment(RegistrationViewModel(service: AuthService()))
             }
         }
     }
 }
 
 #Preview {
-    ContentView(service: AuthServiceMock())
+    ContentView()
 }
