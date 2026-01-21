@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct FeedCell: View {
     @State private var viewModel: FeedCellViewModel
@@ -38,7 +39,15 @@ struct FeedCell: View {
 
             // post image
 
-            Image(post.imageUrl)
+            KFImage(URL(string: post.imageUrl))
+                .onFailureView {
+                    Image(systemName: "xmark.circle")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: 400)
+                        .clipShape(Rectangle())
+                        .foregroundStyle(Color(.systemGray4))
+                }
                 .resizable()
                 .scaledToFill()
                 .frame(height: 400)

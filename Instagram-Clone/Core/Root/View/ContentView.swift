@@ -14,7 +14,7 @@ struct ContentView: View {
                let user = Authentication.shared.user {
                 MainTabView(user: user)
             } else {
-                LoginView(viewModel: LoginViewModel(service: AuthService()))
+                LoginView(viewModel: LoginViewModel(service: AuthServiceMock()))
                     .environment(RegistrationViewModel(service: AuthService()))
             }
         }

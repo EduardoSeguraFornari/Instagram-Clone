@@ -8,11 +8,17 @@
 import SwiftUI
 
 struct FeedView: View {
+    @State private var viewModel: FeedViewModel
+
+    init(viewModel: FeedViewModel) {
+        self.viewModel = viewModel
+    }
+
     var body: some View {
         NavigationStack {
             ScrollView {
                 LazyVStack(spacing: 32) {
-                    ForEach(Post.postsMock) { post in
+                    ForEach(viewModel.posts) { post in
                         FeedCell(post: post)
                     }
                 }
@@ -38,5 +44,5 @@ struct FeedView: View {
 }
 
 #Preview {
-    FeedView()
+    FeedView(viewModel: FeedViewModel(feedService: FeedServiceMock(), userService: UserServiceMock()))
 }

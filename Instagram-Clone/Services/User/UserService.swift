@@ -17,4 +17,25 @@ struct UserService: UserServiceProtocol {
             throw error
         }
     }
+
+    func fetchUser(withId id: String) async throws -> User {
+        do {
+            let snapshot = try await Firestore.firestore().collection("users").document(id).getDocument()
+            return try snapshot.data(as: User.self)
+        } catch {
+            print("DEBUG: Failed to fetch user with error: \(error.localizedDescription)")
+            throw error
+        }
+    }
+
+    func uploadUserData(email: String, id: String, username: String) async throws {
+        let user = User(id: id, username: username, email: email)
+        do {
+            let data = try Firestore.Encoder().encode(user)
+            try await Firestore.firestore().collection("users").document(id).setData(data)
+        } catch {
+            print("DEBUG: Failed to upload user data with error: \(error.localizedDescription)")
+            throw error
+        }
+    }
 }

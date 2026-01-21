@@ -33,7 +33,7 @@ extension Post {
             likes: 142,
             imageUrl: "batman-post",
             timestamp: Timestamp(),
-            user: User.usersMock[0]
+            user: nil
         ),
         Post(
             id: UUID().uuidString,
@@ -42,7 +42,7 @@ extension Post {
             likes: 89,
             imageUrl: "wakanda-forever",
             timestamp: Timestamp(),
-            user: User.usersMock[1]
+            user: nil
         ),
         Post(
             id: UUID().uuidString,
@@ -51,7 +51,7 @@ extension Post {
             likes: 256,
             imageUrl: "batman-profile",
             timestamp: Timestamp(),
-            user: User.usersMock[2]
+            user: nil
         ),
         Post(
             id: UUID().uuidString,
@@ -60,7 +60,7 @@ extension Post {
             likes: 73,
             imageUrl: "wakanda-forever",
             timestamp: Timestamp(),
-            user: User.usersMock[3]
+            user: nil
         ),
         Post(
             id: UUID().uuidString,
@@ -69,7 +69,7 @@ extension Post {
             likes: 187,
             imageUrl: "batman-post",
             timestamp: Timestamp(),
-            user: User.usersMock[4]
+            user: nil
         ),
         Post(
             id: UUID().uuidString,
@@ -78,7 +78,7 @@ extension Post {
             likes: 45,
             imageUrl: "wakanda-forever",
             timestamp: Timestamp(),
-            user: User.usersMock[0]
+            user: nil
         ),
         Post(
             id: UUID().uuidString,
@@ -87,7 +87,7 @@ extension Post {
             likes: 312,
             imageUrl: "batman-profile",
             timestamp: Timestamp(),
-            user: User.usersMock[1]
+            user: nil
         ),
         Post(
             id: UUID().uuidString,
@@ -96,7 +96,7 @@ extension Post {
             likes: 67,
             imageUrl: "wakanda-forever",
             timestamp: Timestamp(),
-            user: User.usersMock[2]
+            user: nil
         ),
         Post(
             id: UUID().uuidString,
@@ -105,7 +105,7 @@ extension Post {
             likes: 201,
             imageUrl: "batman-post",
             timestamp: Timestamp(),
-            user: User.usersMock[3]
+            user: nil
         ),
         Post(
             id: UUID().uuidString,
@@ -114,7 +114,7 @@ extension Post {
             likes: 134,
             imageUrl: "wakanda-forever",
             timestamp: Timestamp(),
-            user: User.usersMock[4]
+            user: nil
         )
     ]
 }

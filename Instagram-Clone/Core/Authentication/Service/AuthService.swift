@@ -9,7 +9,10 @@ import FirebaseAuth
 import FirebaseFirestore
 
 final class AuthService: AuthServiceProtocol {
-    init() {
+    private let userService: UserServiceProtocol
+
+    init(userService: UserServiceProtocol = UserService()) {
+        self.userService = userService
         Authentication.shared.loggedIn = Auth.auth().currentUser != nil
     }
 
@@ -26,9 +29,12 @@ final class AuthService: AuthServiceProtocol {
 
     func loadUserData() async throws {
         guard let currentUid = Auth.auth().currentUser?.uid else { return }
-        let snapshot = try await Firestore.firestore().collection("users").document(currentUid).getDocument()
-        let user = try snapshot.data(as: User.self)
-        Authentication.shared.user = user
+        do {
+            Authentication.shared.user = try await userService.fetchUser(withId: currentUid)
+        } catch {
+            print("DEBUG: Failed to load user data with error: \(error.localizedDescription)")
+            throw error
+        }
     }
 
     func logIn(withEmail email: String, password: String) async throws {
@@ -51,8 +57,7 @@ final class AuthService: AuthServiceProtocol {
     func uploadUserData(email: String, id: String, username: String) async throws {
         let user = User(id: id, username: username, email: email)
         do {
-            let data = try Firestore.Encoder().encode(user)
-            try await Firestore.firestore().collection("users").document(id).setData(data)
+            try await userService.uploadUserData(email: email, id: id, username: username)
             Authentication.shared.user = user
         } catch {
             print("DEBUG: Failed to upload user data with error: \(error.localizedDescription)")

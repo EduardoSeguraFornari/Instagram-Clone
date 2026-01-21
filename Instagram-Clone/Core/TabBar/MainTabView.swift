@@ -14,7 +14,7 @@ struct MainTabView: View {
 
     var body: some View {
         TabView(selection: $selectedIndex) {
-            FeedView()
+            FeedView(viewModel: FeedViewModel(feedService: FeedServiceMock(), userService: UserServiceMock()))
                 .onAppear { selectedIndex = 0 }
                 .tabItem {
                     Image(systemName: "house")
