@@ -9,6 +9,7 @@ import SwiftUI
 import Kingfisher
 
 struct FeedCell: View {
+    @State private var showComments = false
     @State private var viewModel: FeedCellViewModel
 
     private var post: Post {
@@ -63,7 +64,7 @@ struct FeedCell: View {
                         .foregroundStyle(didLike ? .red : .black)
                 }
                 Button {
-                    print("Comment on post")
+                    showComments.toggle()
                 } label: {
                     Image(systemName: "bubble.right")
                         .imageScale(.large)
@@ -91,7 +92,7 @@ struct FeedCell: View {
 
             // caption label
             HStack {
-                Text("\(post.user?.username ?? "") ").fontWeight(.semibold) +
+                Text(post.user?.username ?? "").fontWeight(.semibold) +
                 Text(post.caption)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -105,6 +106,10 @@ struct FeedCell: View {
                 .padding(.leading, 10)
                 .padding(.top, 1)
                 .foregroundColor(.gray)
+        }
+        .sheet(isPresented: $showComments) {
+            CommentsView()
+                .presentationDragIndicator(.visible)
         }
     }
 
