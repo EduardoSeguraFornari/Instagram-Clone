@@ -36,7 +36,7 @@ final class UploadPostViewModel {
     func uploadPost(caption: String) async {
         guard let ownerUid = Authentication.shared.user?.id else { return }
         guard let uiImage = uiImage else { return }
-        let postRef = Firestore.firestore().collection("posts").document()
+        let postRef = PostService.postsCollection.document()
 
         do {
             guard let imageUrl = try await service.upload(image: uiImage) else { return }
