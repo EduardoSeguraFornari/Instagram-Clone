@@ -16,7 +16,6 @@ final class PostService: PostServiceProtocol {
         }
         return PostService()
     }
-    static let postsCollection = Firestore.firestore().collection("posts")
 
     private let userService: UserServiceProtocol
 
@@ -26,7 +25,7 @@ final class PostService: PostServiceProtocol {
 
     func fetchPosts() async throws -> [Post] {
         do {
-            let snapshot = try await PostService.postsCollection.getDocuments()
+            let snapshot = try await FirebaseConstants.postsCollection.getDocuments()
             var posts = snapshot.documents.compactMap { try? $0.data(as: Post.self) }
 
             for index in posts.indices {
@@ -44,7 +43,7 @@ final class PostService: PostServiceProtocol {
 
     func fetchUserPosts(id: String) async throws -> [Post] {
         do {
-            let query = try await PostService.postsCollection.whereField("ownerUid", isEqualTo: id).getDocuments()
+            let query = try await FirebaseConstants.postsCollection.whereField("ownerUid", isEqualTo: id).getDocuments()
             var posts = query.documents.compactMap { try? $0.data(as: Post.self) }
 
             for index in posts.indices {
@@ -71,7 +70,7 @@ extension PostService {
     func checkIfUserLikedPost(_ post: Post) async throws -> Bool {
         guard let currentUserId = Authentication.shared.user?.id else { return false }
         do {
-            let snapshot = try await UserService.usersCollection.document(currentUserId).collection("user-likes")
+            let snapshot = try await FirebaseConstants.usersCollection.document(currentUserId).collection("user-likes")
                 .document(post.id).getDocument()
             return snapshot.exists
         } catch {
@@ -83,10 +82,10 @@ extension PostService {
     func likePost(_ post: Post) async throws {
         do {
             guard let currentUserId = Authentication.shared.user?.id else { return }
-            async let _ = try await PostService.postsCollection.document(post.id).collection("post-likes")
+            async let _ = try await FirebaseConstants.postsCollection.document(post.id).collection("post-likes")
                 .document(currentUserId).setData([:])
-            async let _ = try await PostService.postsCollection.document(post.id).updateData(["likes": post.likes + 1])
-            async let _ = UserService.usersCollection.document(currentUserId).collection("user-likes").document(post.id).setData([:])
+            async let _ = try await FirebaseConstants.postsCollection.document(post.id).updateData(["likes": post.likes + 1])
+            async let _ = FirebaseConstants.usersCollection.document(currentUserId).collection("user-likes").document(post.id).setData([:])
         } catch {
             print("DEBUG: Failed like post with error: \(error.localizedDescription)")
             throw error
@@ -96,10 +95,10 @@ extension PostService {
     func unlikePost(_ post: Post) async throws {
         do {
             guard let currentUserId = Authentication.shared.user?.id else { return }
-            async let _ = try await PostService.postsCollection.document(post.id).collection("post-likes")
+            async let _ = try await FirebaseConstants.postsCollection.document(post.id).collection("post-likes")
                 .document(currentUserId).delete()
-            async let _ = try await PostService.postsCollection.document(post.id).updateData(["likes": post.likes - 1])
-            async let _ = UserService.usersCollection.document(currentUserId).collection("user-likes")
+            async let _ = try await FirebaseConstants.postsCollection.document(post.id).updateData(["likes": post.likes - 1])
+            async let _ = FirebaseConstants.usersCollection.document(currentUserId).collection("user-likes")
                 .document(post.id).delete()
         } catch {
             print("DEBUG: Failed unlike post with error: \(error.localizedDescription)")

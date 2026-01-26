@@ -15,7 +15,6 @@ struct UserService: UserServiceProtocol {
         }
         return UserService()
     }
-    static let usersCollection = Firestore.firestore().collection("users")
 
     private let imageUploaderService: ImageUploaderServiceProtocol
 
@@ -25,7 +24,7 @@ struct UserService: UserServiceProtocol {
 
     func fetchAllUsers() async throws -> [User] {
         do {
-            let snapshot = try await UserService.usersCollection.getDocuments()
+            let snapshot = try await FirebaseConstants.usersCollection.getDocuments()
             return snapshot.documents.compactMap { try? $0.data(as: User.self) }
         } catch {
             throw error
@@ -34,7 +33,7 @@ struct UserService: UserServiceProtocol {
 
     func fetchUser(withId id: String) async throws -> User {
         do {
-            return try await UserService.usersCollection.document(id).getDocument(as: User.self)
+            return try await FirebaseConstants.usersCollection.document(id).getDocument(as: User.self)
         } catch {
             print("DEBUG: Failed to fetch user with error: \(error.localizedDescription)")
             throw error
@@ -58,7 +57,7 @@ struct UserService: UserServiceProtocol {
                 data["bio"] = bio ?? ""
             }
             if !data.isEmpty {
-                try await UserService.usersCollection.document(currentUser.id).updateData(data)
+                try await FirebaseConstants.usersCollection.document(currentUser.id).updateData(data)
             }
         } catch {
             print("DEBUG: Failed to update user data with error: \(error.localizedDescription)")
@@ -69,7 +68,7 @@ struct UserService: UserServiceProtocol {
         let user = User(id: id, username: username, email: email)
         do {
             let data = try Firestore.Encoder().encode(user)
-            try await UserService.usersCollection.document(id).setData(data)
+            try await FirebaseConstants.usersCollection.document(id).setData(data)
         } catch {
             print("DEBUG: Failed to upload user data with error: \(error.localizedDescription)")
             throw error
