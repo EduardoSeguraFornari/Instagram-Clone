@@ -18,7 +18,7 @@ final class AuthService: AuthServiceProtocol {
 
     private let userService: UserServiceProtocol
 
-    init(userService: UserServiceProtocol = UserService()) {
+    init(userService: UserServiceProtocol = UserService.instance) {
         self.userService = userService
         Authentication.shared.loggedIn = Auth.auth().currentUser != nil
     }

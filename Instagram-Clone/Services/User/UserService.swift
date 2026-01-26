@@ -18,7 +18,7 @@ struct UserService: UserServiceProtocol {
 
     private let imageUploaderService: ImageUploaderServiceProtocol
 
-    init (imageUploaderService: ImageUploaderServiceProtocol = ImageUploaderService()) {
+    init (imageUploaderService: ImageUploaderServiceProtocol = ImageUploaderService.instance) {
         self.imageUploaderService = imageUploaderService
     }
 

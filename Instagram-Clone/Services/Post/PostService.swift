@@ -19,7 +19,7 @@ final class PostService: PostServiceProtocol {
 
     private let userService: UserServiceProtocol
 
-    init(userService: UserServiceProtocol = UserService()) {
+    init(userService: UserServiceProtocol = UserService.instance) {
         self.userService = userService
     }
 
