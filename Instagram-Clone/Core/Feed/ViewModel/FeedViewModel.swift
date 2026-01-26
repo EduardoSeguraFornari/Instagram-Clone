@@ -16,7 +16,6 @@ final class FeedViewModel {
 
     init (postService: PostServiceProtocol) {
         self.postService = postService
-        Task { await fetchPosts() }
     }
 
     func fetchPosts() async {

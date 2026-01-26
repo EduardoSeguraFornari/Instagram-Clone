@@ -8,24 +8,27 @@
 import SwiftUI
 
 struct CommentCell: View {
-    private let user: User
+    private let comment: Comment
+    private var user: User? {
+        comment.user
+    }
 
-    init(user: User) {
-        self.user = user
+    init(comment: Comment) {
+        self.comment = comment
     }
 
     var body: some View {
         HStack {
-            AvatarView(user: user, size: .xSmall)
+            AvatarView(user: comment.user, size: .xSmall)
 
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 2) {
-                    Text(user.username)
+                    Text(user?.username ?? "")
                         .fontWeight(.semibold)
                     Text("6d")
                         .foregroundStyle(.black)
                 }
-                Text("Look at this amazing photo!")
+                Text(comment.commentText)
             }
             .font(.caption)
 
@@ -36,5 +39,5 @@ struct CommentCell: View {
 }
 
 #Preview {
-    CommentCell(user: User.userMock)
+    CommentCell(comment: DeveloperPreview.comment)
 }

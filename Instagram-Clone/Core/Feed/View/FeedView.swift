@@ -40,6 +40,7 @@ struct FeedView: View {
                 }
             }
         }
+        .task { await viewModel.fetchPosts() }
     }
 }
 

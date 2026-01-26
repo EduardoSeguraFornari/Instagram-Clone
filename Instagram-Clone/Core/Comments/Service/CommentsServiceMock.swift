@@ -6,5 +6,9 @@
 //
 
 final class CommentsServiceMock: CommentsServiceProtocol {
-    func ulploadComment(_ comment: Comment, postId: String) async throws { }
+    func fetchComments(postId: String) async throws -> [Comment] {
+        DeveloperPreview.commentsMock.filter { $0.postID == postId }
+    }
+
+    func uploadComment(_ comment: Comment, postId: String) async throws { }
 }

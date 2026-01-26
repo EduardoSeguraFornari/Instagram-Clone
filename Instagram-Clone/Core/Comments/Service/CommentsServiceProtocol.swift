@@ -6,5 +6,6 @@
 //
 
 protocol CommentsServiceProtocol {
-    func ulploadComment(_ comment: Comment, postId: String) async throws
+    func fetchComments(postId: String) async throws -> [Comment]
+    func uploadComment(_ comment: Comment, postId: String) async throws
 }

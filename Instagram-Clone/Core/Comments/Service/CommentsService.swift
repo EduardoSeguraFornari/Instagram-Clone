@@ -16,7 +16,19 @@ final class CommentsService: CommentsServiceProtocol {
         return CommentsService()
     }
 
-    func ulploadComment(_ comment: Comment, postId: String) async throws {
+    func fetchComments(postId: String) async throws -> [Comment] {
+        do {
+            let snapshot = try await PostService.postsCollection.document(postId).collection("post-comments")
+                .order(by: "timestamp", descending: true)
+                .getDocuments()
+            return snapshot.documents.compactMap { try? $0.data(as: Comment.self) }
+        } catch {
+            print("DEBUG: Failed to fetch comments with error: \(error.localizedDescription)")
+            throw error
+        }
+    }
+
+    func uploadComment(_ comment: Comment, postId: String) async throws {
         do {
             let commentData = try Firestore.Encoder().encode(comment)
             try await PostService.postsCollection.document(postId).collection("post-comments")

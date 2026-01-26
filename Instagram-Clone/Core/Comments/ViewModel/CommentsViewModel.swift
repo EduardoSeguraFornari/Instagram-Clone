@@ -11,6 +11,7 @@ import Firebase
 @Observable
 final class CommentsViewModel {
     var comments = [Comment]()
+    var text = ""
 
     private let post: Post
     private let service: CommentsServiceProtocol
@@ -20,19 +21,41 @@ final class CommentsViewModel {
         self.service = service
     }
 
-    func ulploadComment(commentText: String) async {
+    func fetchComments() async {
+        do {
+            self.comments = try await service.fetchComments(postId: post.id)
+            await fetchUserDataForComments()
+        } catch {
+            print("DEBUG: Failed to fetch comments with error: \(error.localizedDescription)")
+        }
+    }
+
+    func uploadComment() async {
         do {
             guard let currentUserId = Authentication.shared.user?.id else { return }
-            let comment = Comment(
+            var comment = Comment(
                 postOwnerUid: post.ownerUid,
-                commentText: commentText,
+                commentText: text,
                 postID: post.id,
                 timestamp: Timestamp(),
                 commentOwnerUid: currentUserId
             )
-            try await service.ulploadComment(comment, postId: post.id)
+            comment.user = Authentication.shared.user
+            try await service.uploadComment(comment, postId: post.id)
+            comments.insert(comment, at: 0)
+            text = ""
         } catch {
             print("DEBUG: Failed to upload comment with error: \(error.localizedDescription)")
+        }
+    }
+
+    private func fetchUserDataForComments() async {
+        do {
+            for index in comments.indices {
+                comments[index].user = try await UserService().fetchUser(withId: comments[index].postOwnerUid)
+            }
+        } catch {
+            print("DEBUG: Failed to fetch user data for comments with error: \(error.localizedDescription)")
         }
     }
 }

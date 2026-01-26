@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct CommentsView: View {
-    @State private var text: String = ""
     @State private var viewModel: CommentsViewModel
 
     init(viewModel: CommentsViewModel) {
@@ -25,8 +24,8 @@ struct CommentsView: View {
 
             ScrollView {
                 LazyVStack(spacing: 24) {
-                    ForEach(0...15, id: \.self) { comment in
-                        CommentCell(user: User.userMock)
+                    ForEach(viewModel.comments) { comment in
+                        CommentCell(comment: comment)
                     }
                 }
             }
@@ -35,9 +34,9 @@ struct CommentsView: View {
             Divider()
 
             HStack(spacing: 12) {
-                AvatarView(user: User.userMock, size: .xSmall)
+                AvatarView(user: Authentication.shared.user, size: .xSmall)
                 ZStack(alignment: .trailing) {
-                    TextField("Add a comment...", text: $text, axis: .vertical)
+                    TextField("Add a comment...", text: $viewModel.text, axis: .vertical)
                         .font(.footnote)
                         .padding(12)
                         .padding(.trailing, 40)
@@ -46,7 +45,7 @@ struct CommentsView: View {
                                 .stroke(Color(.systemGray5), lineWidth: 1)
                         }
                     Button {
-                        Task { await viewModel.ulploadComment(commentText: text) }
+                        Task { await viewModel.uploadComment() }
                     } label: {
                         Text("Post")
                             .font(.subheadline)
@@ -57,6 +56,9 @@ struct CommentsView: View {
                 }
             }
             .padding()
+        }
+        .task {
+            await viewModel.fetchComments()
         }
     }
 }
