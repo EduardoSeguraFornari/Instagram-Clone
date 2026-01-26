@@ -69,7 +69,7 @@ final class PostService: PostServiceProtocol {
 
 extension PostService {
     func checkIfUserLikedPost(_ post: Post) async throws -> Bool {
-        guard let currentUserId = Auth.auth().currentUser?.uid else { return false }
+        guard let currentUserId = Authentication.shared.user?.id else { return false }
         do {
             let snapshot = try await UserService.usersCollection.document(currentUserId).collection("user-likes")
                 .document(post.id).getDocument()
@@ -82,7 +82,7 @@ extension PostService {
 
     func likePost(_ post: Post) async throws {
         do {
-            guard let currentUserId = Auth.auth().currentUser?.uid else { return }
+            guard let currentUserId = Authentication.shared.user?.id else { return }
             async let _ = try await PostService.postsCollection.document(post.id).collection("post-likes")
                 .document(currentUserId).setData([:])
             async let _ = try await PostService.postsCollection.document(post.id).updateData(["likes": post.likes + 1])
@@ -95,7 +95,7 @@ extension PostService {
 
     func unlikePost(_ post: Post) async throws {
         do {
-            guard let currentUserId = Auth.auth().currentUser?.uid else { return }
+            guard let currentUserId = Authentication.shared.user?.id else { return }
             async let _ = try await PostService.postsCollection.document(post.id).collection("post-likes")
                 .document(currentUserId).delete()
             async let _ = try await PostService.postsCollection.document(post.id).updateData(["likes": post.likes - 1])

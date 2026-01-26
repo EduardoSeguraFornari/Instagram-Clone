@@ -35,9 +35,9 @@ final class AuthService: AuthServiceProtocol {
     }
 
     func loadUserData() async throws {
-        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        guard let currentUserId = Authentication.shared.user?.id else { return }
         do {
-            Authentication.shared.user = try await userService.fetchUser(withId: currentUid)
+            Authentication.shared.user = try await userService.fetchUser(withId: currentUserId)
         } catch {
             print("DEBUG: Failed to load user data with error: \(error.localizedDescription)")
             throw error

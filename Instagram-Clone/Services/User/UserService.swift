@@ -34,8 +34,7 @@ struct UserService: UserServiceProtocol {
 
     func fetchUser(withId id: String) async throws -> User {
         do {
-            let snapshot = try await UserService.usersCollection.document(id).getDocument()
-            return try snapshot.data(as: User.self)
+            return try await UserService.usersCollection.document(id).getDocument(as: User.self)
         } catch {
             print("DEBUG: Failed to fetch user with error: \(error.localizedDescription)")
             throw error

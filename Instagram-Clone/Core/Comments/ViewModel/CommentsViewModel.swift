@@ -33,17 +33,16 @@ final class CommentsViewModel {
     func uploadComment() async {
         do {
             guard let currentUserId = Authentication.shared.user?.id else { return }
-            var comment = Comment(
+            let comment = Comment(
                 postOwnerUid: post.ownerUid,
                 commentText: text,
                 postID: post.id,
                 timestamp: Timestamp(),
                 commentOwnerUid: currentUserId
             )
-            comment.user = Authentication.shared.user
             try await service.uploadComment(comment, postId: post.id)
-            comments.insert(comment, at: 0)
             text = ""
+            await fetchComments()
         } catch {
             print("DEBUG: Failed to upload comment with error: \(error.localizedDescription)")
         }
